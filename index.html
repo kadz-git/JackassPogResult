@@ -3650,7 +3650,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // 各ヘッダーに ▽ ボタンとドロップダウンを追加
         headers.forEach(function(th, colIdx) {
-            th.style.position = 'relative';
+            /* position:sticky は CSS で設定済みのため JS では上書きしない */
             th.style.whiteSpace = 'nowrap';
 
             // ▽ボタン
