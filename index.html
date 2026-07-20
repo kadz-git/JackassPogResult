@@ -72,29 +72,6 @@
             top: 0;
             z-index: 3;
         }
-        /* フィルター入力行の th */
-        .table thead .filter-row th {
-            background-color: #f8f9fa;
-            padding: 5px 4px;
-            position: sticky;
-            z-index: 2;
-            border-bottom: 1px solid #dee2e6;
-        }
-        .filter-input {
-            width: 100%;
-            padding: 3px 6px;
-            font-size: 12px;
-            border: 1px solid #c8e6c9;
-            border-radius: 4px;
-            box-sizing: border-box;
-            color: #333;
-            background-color: #fff;
-        }
-        .filter-input:focus {
-            outline: none;
-            border-color: #2e7d32;
-            box-shadow: 0 0 0 2px rgba(46,125,50,0.15);
-        }
         .table tbody td {
             padding: 12px 10px;
             vertical-align: middle;
@@ -102,40 +79,67 @@
             white-space: nowrap;
             text-align: right;  /* デフォルト右寄せ */
         }
-        /* ============================================
-           レスポンシブデザイン：スマホ画面（768px以下）
-           ============================================ */
+        /* ▽ フィルターボタン（ヘッダー内に埋め込み） */
+        .filter-btn {
+            display: inline-block;
+            cursor: pointer;
+            font-size: 9px;
+            margin-left: 4px;
+            color: #aaa;
+            user-select: none;
+            vertical-align: middle;
+            line-height: 1;
+        }
+        .filter-btn.active {
+            color: #2e7d32;   /* フィルター適用中はグリーン */
+            font-size: 9px;
+        }
+        /* ドロップダウンリスト */
+        .filter-dropdown {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            min-width: 130px;
+            max-height: 220px;
+            overflow-y: auto;
+            background: #fff;
+            border: 1px solid #c8e6c9;
+            border-radius: 6px;
+            box-shadow: 0 4px 14px rgba(0,0,0,0.18);
+            z-index: 9999;
+        }
+        .filter-dropdown.open {
+            display: block;
+        }
+        .filter-option {
+            padding: 7px 14px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: normal;
+            text-align: left;
+            white-space: nowrap;
+            color: #333;
+        }
+        .filter-option:hover {
+            background: #f1f8e9;
+            color: #2e7d32;
+        }
+        .filter-option.selected {
+            background: #e2efda;
+            color: #2e7d32;
+            font-weight: 600;
+        }
+        /* レスポンシブデザイン：スマホ画面（768px以下） */
         @media (max-width: 768px) {
-            body {
-                padding: 10px 6px;
-            }
-            .container-box {
-                padding: 14px 10px;
-                border-radius: 8px;
-            }
-            h1 {
-                font-size: 1.2rem;
-                margin-bottom: 12px;
-            }
-            .nav-tabs .nav-link {
-                font-size: 12px;
-                padding: 8px 8px;
-            }
-            .table-container {
-                max-height: 80vh;  /* スマホは横長なので高さを拡大 */
-            }
-            .table thead th {
-                font-size: 11px;
-                padding: 8px 6px;
-            }
-            .table tbody td {
-                font-size: 11px;
-                padding: 7px 6px;
-            }
-            .filter-input {
-                font-size: 11px;
-                padding: 2px 4px;
-            }
+            body { padding: 10px 6px; }
+            .container-box { padding: 14px 10px; border-radius: 8px; }
+            h1 { font-size: 1.2rem; margin-bottom: 12px; }
+            .nav-tabs .nav-link { font-size: 12px; padding: 8px 8px; }
+            .table-container { max-height: 80vh; }
+            .table thead th { font-size: 11px; padding: 8px 6px; }
+            .table tbody td { font-size: 11px; padding: 7px 6px; }
+            .filter-option { font-size: 13px; padding: 9px 14px; }  /* タップしやすく */
         }
     </style>
 </head>
@@ -3627,8 +3631,9 @@ document.addEventListener('DOMContentLoaded', function() {
         var headerRow = thead.querySelector('tr');
         var headers = Array.from(headerRow.querySelectorAll('th'));
         var leftIdxSet = new Set();
+        var activeFilters = {};  /* colIdx(string) -> 選択値 */
 
-        // 左寄せ列の特定・ヘッダー設定
+        // 左寄せ列の特定・header設定
         headers.forEach(function(th, idx) {
             if (LEFT_COLS.indexOf(th.textContent.trim()) !== -1) {
                 leftIdxSet.add(idx);
@@ -3643,43 +3648,97 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         });
 
-        // フィルター行を作成して thead に追加
-        var filterRow = document.createElement('tr');
-        filterRow.className = 'filter-row';
-        headers.forEach(function(th, idx) {
-            var filterTh = document.createElement('th');
-            var input = document.createElement('input');
-            input.type = 'text';
-            input.className = 'filter-input';
-            input.placeholder = String.fromCodePoint(0x1F50D);
-            input.setAttribute('data-col', idx);
-            input.addEventListener('input', function() { applyFilters(table); });
-            if (leftIdxSet.has(idx)) input.style.textAlign = 'left';
-            filterTh.appendChild(input);
-            filterRow.appendChild(filterTh);
-        });
-        thead.appendChild(filterRow);
+        // 各ヘッダーに ▽ ボタンとドロップダウンを追加
+        headers.forEach(function(th, colIdx) {
+            th.style.position = 'relative';
+            th.style.whiteSpace = 'nowrap';
 
-        // フィルター行の sticky top をヘッダー行の高さに合わせて設定
-        var hHeight = headerRow.getBoundingClientRect().height || 47;
-        Array.from(filterRow.querySelectorAll('th')).forEach(function(th) {
-            th.style.top = hHeight + 'px';
+            // ▽ボタン
+            var btn = document.createElement('span');
+            btn.className = 'filter-btn';
+            btn.textContent = '▽';
+            btn.title = 'フィルター';
+            th.appendChild(btn);
+
+            // ドロップダウンリストを作成
+            var dropdown = document.createElement('div');
+            dropdown.className = 'filter-dropdown';
+            th.appendChild(dropdown);
+
+            // ドロップダウンのオプションを構築
+            function buildDropdown() {
+                dropdown.innerHTML = '';
+                var key = String(colIdx);
+                var currentVal = activeFilters[key];
+
+                // 「すべて」オプション
+                var allOpt = document.createElement('div');
+                allOpt.className = 'filter-option' + (currentVal === undefined ? ' selected' : '');
+                allOpt.textContent = '（すべて）';
+                allOpt.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    delete activeFilters[key];
+                    btn.classList.remove('active');
+                    btn.textContent = '▽';
+                    dropdown.classList.remove('open');
+                    applyFilters(table, activeFilters);
+                });
+                dropdown.appendChild(allOpt);
+
+                // 各列のユニーク値を取得（非表示行も含めすべて）
+                var values = [];
+                table.querySelectorAll('tbody tr').forEach(function(tr) {
+                    var tds = tr.querySelectorAll('td');
+                    if (tds[colIdx]) {
+                        var v = tds[colIdx].textContent.trim();
+                        if (v && values.indexOf(v) === -1) values.push(v);
+                    }
+                });
+                values.sort();
+
+                values.forEach(function(val) {
+                    var opt = document.createElement('div');
+                    opt.className = 'filter-option' + (currentVal === val ? ' selected' : '');
+                    opt.textContent = val;
+                    opt.addEventListener('click', function(e) {
+                        e.stopPropagation();
+                        activeFilters[key] = val;
+                        btn.classList.add('active');
+                        btn.textContent = '▼';  /* 適用中は▼（実形） */
+                        dropdown.classList.remove('open');
+                        applyFilters(table, activeFilters);
+                    });
+                    dropdown.appendChild(opt);
+                });
+            }
+
+            // ボタンクリックで開閉トグル
+            btn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                // 他のドロップダウンをすべて閉じる
+                document.querySelectorAll('.filter-dropdown.open').forEach(function(d) {
+                    if (d !== dropdown) d.classList.remove('open');
+                });
+                buildDropdown();
+                dropdown.classList.toggle('open');
+            });
         });
     });
 
-    // 全フィルターを適用して行の表示/非表示を切り替え
-    function applyFilters(table) {
-        var inputs = table.querySelectorAll('.filter-input');
-        var filters = [];
-        inputs.forEach(function(input) {
-            var v = input.value.toLowerCase().trim();
-            if (v) filters.push({ col: parseInt(input.getAttribute('data-col')), value: v });
+    // ドロップダウン外クリックでリストを閉じる
+    document.addEventListener('click', function() {
+        document.querySelectorAll('.filter-dropdown.open').forEach(function(d) {
+            d.classList.remove('open');
         });
+    });
+
+    // フィルターを適用して行の表示/非表示を切り替え
+    function applyFilters(table, filters) {
         table.querySelectorAll('tbody tr').forEach(function(tr) {
             var tds = Array.from(tr.querySelectorAll('td'));
-            var visible = filters.every(function(f) {
-                var td = tds[f.col];
-                return td && td.textContent.toLowerCase().indexOf(f.value) !== -1;
+            var visible = Object.keys(filters).every(function(key) {
+                var td = tds[parseInt(key)];
+                return td && td.textContent.trim() === filters[key];
             });
             tr.style.display = visible ? '' : 'none';
         });
