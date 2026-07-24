@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>POG結果集計 2026.07.23</title>
+    <title>POG結果集計 2026.07.25</title>
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
@@ -79,6 +79,19 @@
             white-space: nowrap;
             text-align: right;  /* デフォルト右寄せ */
         }
+        /* 左端列（オーナー）を横スクロール時も固定 */
+        .table thead th:first-child {
+            position: sticky;
+            left: 0;
+            z-index: 4;  /* 縦・横両方の固定セル（左上）を最前面に */
+        }
+        .table tbody td:first-child {
+            position: sticky;
+            left: 0;
+            z-index: 1;
+            background-color: #ffffff;
+            box-shadow: 2px 0 4px rgba(0, 0, 0, 0.08);
+        }
         /* ▽ フィルターボタン（ヘッダー内に埋め込み） */
         .filter-btn {
             display: inline-block;
@@ -145,7 +158,7 @@
 </head>
 <body>
 <div class="container container-box">
-    <h1>POG結果集計 2026.07.23</h1>
+    <h1>POG結果集計 2026.07.25</h1>
     
     <!-- タブメニュー -->
     <ul class="nav nav-tabs" id="pogTab" role="tablist">
@@ -3337,27 +3350,6 @@
     </tr>
     <tr>
       <td>カクガリータ</td>
-      <td>8</td>
-      <td>タクティシアン</td>
-      <td>2026-06-21</td>
-      <td>東京</td>
-      <td>4</td>
-      <td>芝</td>
-      <td>1400</td>
-      <td>一般</td>
-      <td>1</td>
-      <td>1</td>
-      <td>200</td>
-      <td>110</td>
-      <td>260</td>
-      <td>280</td>
-      <td>540</td>
-      <td>340</td>
-      <td>380</td>
-      <td>1030</td>
-    </tr>
-    <tr>
-      <td>カクガリータ</td>
       <td>4</td>
       <td>レイデアルマス</td>
       <td>2026-06-21</td>
@@ -3376,6 +3368,27 @@
       <td>0</td>
       <td>0</td>
       <td>0</td>
+    </tr>
+    <tr>
+      <td>カクガリータ</td>
+      <td>8</td>
+      <td>タクティシアン</td>
+      <td>2026-06-21</td>
+      <td>東京</td>
+      <td>4</td>
+      <td>芝</td>
+      <td>1400</td>
+      <td>一般</td>
+      <td>1</td>
+      <td>1</td>
+      <td>200</td>
+      <td>110</td>
+      <td>260</td>
+      <td>280</td>
+      <td>540</td>
+      <td>340</td>
+      <td>380</td>
+      <td>1030</td>
     </tr>
     <tr>
       <td>前田</td>
@@ -3505,16 +3518,16 @@
     </tr>
     <tr>
       <td>塚本</td>
-      <td>10</td>
-      <td>ゴールデンハニビー</td>
+      <td>6</td>
+      <td>スノーウィスパー</td>
       <td>2026-06-20</td>
-      <td>東京</td>
-      <td>4</td>
+      <td>函館</td>
+      <td>5</td>
       <td>芝</td>
-      <td>1400</td>
+      <td>1200</td>
       <td>一般</td>
-      <td>3</td>
-      <td>4</td>
+      <td>5</td>
+      <td>6</td>
       <td>0</td>
       <td>0</td>
       <td>0</td>
@@ -3526,16 +3539,16 @@
     </tr>
     <tr>
       <td>塚本</td>
-      <td>6</td>
-      <td>スノーウィスパー</td>
+      <td>10</td>
+      <td>ゴールデンハニビー</td>
       <td>2026-06-20</td>
-      <td>函館</td>
-      <td>5</td>
+      <td>東京</td>
+      <td>4</td>
       <td>芝</td>
-      <td>1200</td>
+      <td>1400</td>
       <td>一般</td>
-      <td>5</td>
-      <td>6</td>
+      <td>3</td>
+      <td>4</td>
       <td>0</td>
       <td>0</td>
       <td>0</td>
