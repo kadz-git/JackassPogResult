@@ -26,6 +26,15 @@
             font-weight: 700;
             border-bottom: 3px solid #e2efda;
             padding-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        h1 .title-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            flex-shrink: 0;
         }
         .nav-tabs {
             border-bottom: 2px solid #dee2e6;
@@ -148,7 +157,8 @@
         @media (max-width: 768px) {
             body { padding: 10px 6px; }
             .container-box { padding: 14px 10px; border-radius: 8px; }
-            h1 { font-size: 1.2rem; margin-bottom: 12px; }
+            h1 { font-size: 1.2rem; margin-bottom: 12px; gap: 8px; }
+            h1 .title-icon { width: 28px; height: 28px; }
             .nav-tabs .nav-link { font-size: 12px; padding: 8px 8px; }
             .table-container { max-height: 80vh; }
             .table thead th { font-size: 11px; padding: 8px 6px; }
@@ -159,7 +169,7 @@
 </head>
 <body>
 <div class="container container-box">
-    <h1>POG結果集計 2026.07.26</h1>
+    <h1><img src="favicon.png" alt="" class="title-icon">POG結果集計 2026.07.26</h1>
     
     <!-- タブメニュー -->
     <ul class="nav nav-tabs" id="pogTab" role="tablist">
@@ -3207,27 +3217,6 @@
     </tr>
     <tr>
       <td>カクガリータ</td>
-      <td>5</td>
-      <td>レッジェランツァ</td>
-      <td>2026-06-28</td>
-      <td>福島</td>
-      <td>5</td>
-      <td>芝</td>
-      <td>1800</td>
-      <td>一般</td>
-      <td>1</td>
-      <td>4</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-    </tr>
-    <tr>
-      <td>カクガリータ</td>
       <td>2</td>
       <td>ラッキースパークル</td>
       <td>2026-06-28</td>
@@ -3248,14 +3237,14 @@
       <td>46190</td>
     </tr>
     <tr>
-      <td>河村</td>
-      <td>8</td>
-      <td>インディジャズ</td>
+      <td>カクガリータ</td>
+      <td>5</td>
+      <td>レッジェランツァ</td>
       <td>2026-06-28</td>
-      <td>小倉</td>
+      <td>福島</td>
       <td>5</td>
       <td>芝</td>
-      <td>1200</td>
+      <td>1800</td>
       <td>一般</td>
       <td>1</td>
       <td>4</td>
@@ -3269,17 +3258,17 @@
       <td>0</td>
     </tr>
     <tr>
-      <td>カクガリータ</td>
-      <td>4</td>
-      <td>レイデアルマス</td>
-      <td>2026-06-21</td>
-      <td>東京</td>
+      <td>河村</td>
+      <td>8</td>
+      <td>インディジャズ</td>
+      <td>2026-06-28</td>
+      <td>小倉</td>
       <td>5</td>
       <td>芝</td>
-      <td>1800</td>
+      <td>1200</td>
       <td>一般</td>
-      <td>3</td>
-      <td>11</td>
+      <td>1</td>
+      <td>4</td>
       <td>0</td>
       <td>0</td>
       <td>0</td>
@@ -3309,6 +3298,27 @@
       <td>340</td>
       <td>380</td>
       <td>1030</td>
+    </tr>
+    <tr>
+      <td>カクガリータ</td>
+      <td>4</td>
+      <td>レイデアルマス</td>
+      <td>2026-06-21</td>
+      <td>東京</td>
+      <td>5</td>
+      <td>芝</td>
+      <td>1800</td>
+      <td>一般</td>
+      <td>3</td>
+      <td>11</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
     </tr>
     <tr>
       <td>塚田くん</td>
@@ -3417,16 +3427,16 @@
     </tr>
     <tr>
       <td>塚本</td>
-      <td>6</td>
-      <td>スノーウィスパー</td>
+      <td>10</td>
+      <td>ゴールデンハニビー</td>
       <td>2026-06-20</td>
-      <td>函館</td>
-      <td>5</td>
+      <td>東京</td>
+      <td>4</td>
       <td>芝</td>
-      <td>1200</td>
+      <td>1400</td>
       <td>一般</td>
-      <td>5</td>
-      <td>6</td>
+      <td>3</td>
+      <td>4</td>
       <td>0</td>
       <td>0</td>
       <td>0</td>
@@ -3438,16 +3448,16 @@
     </tr>
     <tr>
       <td>塚本</td>
-      <td>10</td>
-      <td>ゴールデンハニビー</td>
+      <td>6</td>
+      <td>スノーウィスパー</td>
       <td>2026-06-20</td>
-      <td>東京</td>
-      <td>4</td>
+      <td>函館</td>
+      <td>5</td>
       <td>芝</td>
-      <td>1400</td>
+      <td>1200</td>
       <td>一般</td>
-      <td>3</td>
-      <td>4</td>
+      <td>5</td>
+      <td>6</td>
       <td>0</td>
       <td>0</td>
       <td>0</td>
